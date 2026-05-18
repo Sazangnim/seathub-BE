@@ -26,6 +26,10 @@ replay_pid*
 # Java build output
 /bin/
 
+# Eclipse workspace metadata
+.metadata/
+
+
 # classpath 안 올라가게 수정
 # Eclipse project settings
 .settings/
