@@ -1,4 +1,4 @@
-package user;
+package DBConnect;
 
 import java.sql.Connection;
 import java.sql.SQLException;
