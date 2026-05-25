@@ -1,4 +1,4 @@
-package user;
+package DBConnect;
 
 import java.io.InputStream;
 import java.io.IOException;
