@@ -18,7 +18,7 @@ public class DBConnector {
     try (FileInputStream fis = new FileInputStream(CONFIG_PATH)) {
         props.load(fis);
     } catch (IOException e) {
-        throw new SQLException("config.properties 파일을 읽을 수 없습니다.", e);
+        throw new SQLException("config.properties 파일을 읽을 수 없습니다..", e);
     }
     
 	// config.properties에서 입력된 정보를 사용한다.

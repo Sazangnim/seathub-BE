@@ -9,7 +9,7 @@ public class DBConnectionTest {
         try {
             Connection conn = DBConnector.getConnection();
 
-            System.out.println("DB 연결 성공!");
+            System.out.println("DB 연결 성공!!");
             System.out.println("현재 DB: " + conn.getCatalog());
 
             conn.close();
