@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DBConnector {
+public class DBConnector2 {
 	
 	private static final String CONFIG_PATH = "config.properties";
 
@@ -30,7 +30,7 @@ public class DBConnector {
 	
 	return DriverManager.getConnection(URL, USER, PASS);
 	}
-	public DBConnector() {}
+	public DBConnector2() {}
 	
 		
 }
