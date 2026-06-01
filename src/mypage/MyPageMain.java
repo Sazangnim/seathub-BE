@@ -81,7 +81,7 @@ public class MyPageMain {
             	System.out.println("사업자 번호: " + u.getBusinessNumber());
 
             System.out.println("---------------------------------");
-            System.out.println("1. 이메일 주소 변경하기  2. 비밀번호 변경하기  0. 뒤로 가기");
+            System.out.println("1. 이메일 변경하기  2. 비밀번호 변경하기  \n0. 뒤로 가기");
             System.out.println("---------------------------------");
 
             System.out.print("선택 >> ");
