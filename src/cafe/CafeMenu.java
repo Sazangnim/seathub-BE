@@ -127,14 +127,17 @@ public class CafeMenu {
         for (int i = 0; i < tagList.length; i++) {
             System.out.println((i + 1) + ". " + tagList[i]);
         }
-        System.out.print("태그 번호 입력 (여러 개는 콤마로 구분, 예: 1,4 / 없으면 0): ");
-        String input = sc.nextLine();
+        
+        while (true) {
+            System.out.print("태그 번호 입력 (여러 개는 콤마로 구분, 예: 1,4 / 없으면 0): ");
+            String input = sc.nextLine();
 
         if (input.trim().equals("0") || input.trim().isEmpty()) {
             return "";
         }
 
         StringBuilder sb = new StringBuilder();
+        boolean valid = true;
         for (String part : input.split(",")) {
             part = part.trim();
             try {
@@ -143,12 +146,18 @@ public class CafeMenu {
                     if (sb.length() > 0) sb.append(",");
                     sb.append(tagList[idx - 1]);
                 } else {
-                    System.out.println(">> 잘못된 입력입니다.\n>>다시 입력해주세요.");
+                	valid = false;
+                	break;
                 }
             } catch (NumberFormatException e) {
-                System.out.println(">> 잘못된 입력입니다.\n>>다시 입력해주세요.");
+            	valid = false;
+            	break;
             }
         }
-        return sb.toString();
+        if (valid) {
+            return sb.toString();
+        }
+        System.out.println(">> 잘못된 입력입니다.\n>>다시 입력해주세요.");
+    }
     }
 }
