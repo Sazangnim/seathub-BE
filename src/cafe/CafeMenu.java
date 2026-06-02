@@ -2,42 +2,49 @@ package cafe;
 
 import java.util.List;
 import java.util.Scanner;
+import user.User;
 
-public class CafeMain {
+public class CafeMenu {
+	// 로그인 성공 후에 들어 올 수 있는 카페 메뉴 부분
 
-    public static void main(String[] args) {
+	
+	public static void cafeMenu(Scanner sc, User loginUser) {
         CafeDAO cafeDao = new CafeDAO();
-        Scanner sc = new Scanner(System.in);
+        
 
         while (true) {
             showMenu();
-            int choice = sc.nextInt();
-            sc.nextLine();
+            String choice = sc.nextLine();
+       
 
             switch (choice) {
-                case 1 -> {
+                case "1" -> {
                     List<Cafe> cafes = cafeDao.findAll();
                     printCafes(cafes);
                     backToMenu(sc);
                 }
-                case 2 -> {
+                case "2" -> {
                     System.out.print("지역 입력 (Ewha / Hongdae / Hyehwa / Jongno): ");
                     String region = sc.nextLine();
                     List<Cafe> cafes = cafeDao.findByRegion(region);
                     printCafes(cafes);
                     backToMenu(sc);
                 }
-                case 3 -> {
+                case "3" -> {
                     System.out.print("태그 입력 (24H / Laptop / Quiet / Women Only / Student Only): ");
                     String tag = sc.nextLine();
                     List<Cafe> cafes = cafeDao.findByTag(tag);
                     printCafes(cafes);
                     backToMenu(sc);
                 }
-                case 4 -> {
-                    System.out.print("사장 userId 입력: ");
-                    int userId = sc.nextInt();
-                    sc.nextLine();
+                case "4" -> {
+                	// 사장 회원만 카페 등록 가능
+                	// 로그인한 회원의 role이 OWNER가 아니면 등록 차단으로 해뒀습니다
+                	if (!loginUser.getRole().equals("OWNER")) {
+                        System.out.println(">> 사장 회원만 카페를 등록할 수 있습니다.");
+                        continue;
+                    }
+                   
                     System.out.print("카페 이름: ");
                     String cafeName = sc.nextLine();
                     System.out.print("지역 (Ewha / Hongdae / Hyehwa / Jongno): ");
@@ -45,20 +52,23 @@ public class CafeMain {
                     System.out.print("주소: ");
                     String address = sc.nextLine();
 
-                    Cafe newCafe = new Cafe(userId, cafeName, region, address);
+                 // userId는 로그인한 사장 정보에서 자동으로 가져오도록 수정했습니다
+                    Cafe newCafe = new Cafe(loginUser.getUser_id(), cafeName, region, address);
                     Cafe saved = cafeDao.save(newCafe);
 
                     String tags = selectTags(sc);
                     cafeDao.saveTags(saved.getCafeId(), tags);
 
-                    System.out.println("등록 완료! cafeId: " + saved.getCafeId());
+                    System.out.println("---------------------------------");
+                    System.out.println("          카페 등록 완료!         ");
+                    System.out.println("---------------------------------");
+                    System.out.println("cafeId: " + saved.getCafeId());
                 }
-                case 5 -> {
+                case "5" -> {
                 	//마이페이지로 연결
                 }
-                case 0 -> {
-                    System.out.println("종료합니다.");
-                    sc.close();
+                case "0" -> {
+                    System.out.println("로그아웃합니다.");
                     return;
                 }
                 default -> System.out.println(">> 잘못된 입력입니다.\n>>다시 입력해주세요.");
@@ -67,15 +77,15 @@ public class CafeMain {
     }
 
     public static void showMenu() {
-        System.out.println("------------------------");
-        System.out.println("         SEATHUB        ");
-        System.out.println("------------------------");
+        System.out.println("---------------------------------");
+        System.out.println("             SEATHUB             ");
+        System.out.println("---------------------------------");
         System.out.println("1. 전체 카페 조회");
         System.out.println("2. 지역별 카페 조회");
         System.out.println("3. 태그별 카페 조회");
         System.out.println("4. 카페 등록 (사장회원)");
         System.out.println("5. 마이페이지");
-        System.out.println("0. 종료");
+        System.out.println("0. 로그아웃");
         System.out.print("선택: ");
     }
 
@@ -109,7 +119,7 @@ public class CafeMain {
         }
     }
 
-    // 태그 선택 (고정 목록)
+    // 태그 선택
     public static String selectTags(Scanner sc) {
         String[] tagList = {"24H", "Women Only", "Student Only", "Quiet", "Laptop"};
 

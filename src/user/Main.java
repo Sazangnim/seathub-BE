@@ -1,6 +1,7 @@
 package user;
 
 import java.util.Scanner;
+import cafe.CafeMenu; 
 
 // 기능: 온보딩, 로그인, 회원가입
 
@@ -67,6 +68,7 @@ public class Main {
 				System.out.println("            로그인 성공!            ");
 				System.out.println("---------------------------------");
 				
+				CafeMenu.cafeMenu(sc, loginUser);
 				// 메인 메뉴 화면 메소드 올 자리!
 				// 임포트 하고
 				// 예시) 클래스.메소드(sc, loginUser); 로그인 유저 개체도 같이 넘김
