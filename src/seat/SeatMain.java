@@ -96,9 +96,14 @@ public class SeatMain {
             int userId = scanner.nextInt();
             System.out.print("이용 시간 입력 (시간): ");
             int hours = scanner.nextInt();
-
-            seatService.issueTicket(userId, Integer.parseInt(selected[0]), hours);
-            return; 
+            
+         // 서비스에서 중복 유저 걸러서 false가 리턴되면, 메뉴로 안 튕기고 목록을 다시 보여줌
+            boolean isSuccess = seatService.issueTicket(userId, Integer.parseInt(selected[0]), hours);
+            if (!isSuccess) {
+                continue; // 다시 좌석 선택 목록의 처음으로 돌아감
+            }
+            
+            return; // 발권 성공 시에만 메인 메뉴로 나감
         }
     }
 

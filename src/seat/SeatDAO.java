@@ -108,6 +108,8 @@ public class SeatDAO {
     // 동시성 락 -> 티켓 추가 -> 좌석 마스터 업데이트
     public void insertTicket(int userId, int seatId, int usageHours) throws SQLException {
         String checkSql = "SELECT COUNT(*) FROM ticket WHERE seat_id = ? AND NOW() BETWEEN start_time AND end_time";
+        // 해당 유저가 현재 이용 중인 다른 티켓이 있는지 검사하는 쿼리 추가
+        String checkUserSql = "SELECT COUNT(*) FROM ticket WHERE user_id = ? AND NOW() BETWEEN start_time AND end_time";
         String insertSql = "INSERT INTO ticket (user_id, seat_id, start_time, end_time, usage_hours) " +
                            "VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL ? HOUR), ?)";
         String updateSeatSql = "UPDATE seat SET status = 'OCCUPIED' WHERE seat_id = ?"; // 명시적 상태 변경 추가
@@ -123,6 +125,17 @@ public class SeatDAO {
                         if (rs.next() && rs.getInt(1) > 0) {
                             conn.rollback();
                             throw new SQLException("ALREADY_OCCUPIED");
+                        }
+                    }
+                }
+                
+                // 유저 동시성 제어 - 한 유저가 동시 발권하는 것 차단
+                try (PreparedStatement checkUserStmt = conn.prepareStatement(checkUserSql + " FOR UPDATE")) {
+                    checkUserStmt.setInt(1, userId);
+                    try (ResultSet rs = checkUserStmt.executeQuery()) {
+                        if (rs.next() && rs.getInt(1) > 0) {
+                            conn.rollback();
+                            throw new SQLException("USER_ALREADY_HAS_TICKET"); 
                         }
                     }
                 }

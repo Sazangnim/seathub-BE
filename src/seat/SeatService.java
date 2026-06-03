@@ -40,6 +40,9 @@ public class SeatService {
             // DAO에서 비관적 락(FOR UPDATE) 검증 후 던진 예외를 가로채서 처리
             if ("ALREADY_OCCUPIED".equals(e.getMessage())) {
                 System.out.println("[오류] 선택하신 좌석은 이미 다른 사용자가 결제 중이거나 사용 중입니다.");
+            } else if ("USER_ALREADY_HAS_TICKET".equals(e.getMessage())) {
+                System.out.println("[오류] 이미 현재 이용 중인 다른 좌석이 존재합니다.");
+                System.out.println(">> 1인당 1개의 좌석만 이용 가능합니다.");
             } else {
                 System.out.println("[오류] 시스템 문제로 인해 발권에 실패했습니다: " + e.getMessage());
             }
