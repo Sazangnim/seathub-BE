@@ -71,7 +71,7 @@ public class CafeMenu {
                     System.out.println("로그아웃합니다.");
                     return;
                 }
-                default -> System.out.println(">> 잘못된 입력입니다.\n>>다시 입력해주세요.");
+                default -> System.out.println(">> 잘못된 입력입니다.\n>> 다시 입력해주세요.");
             }
         }
     }
@@ -137,7 +137,7 @@ public class CafeMenu {
                 continue;
             }
 
-            // 입력한 번호가 카페 목록에 있는지 확인! ( cafeId-> No 검색으로 바꿈 ) 
+            // 입력한 번호가 카페 목록에 있는지 확인! ( 좌석 예역 콘솔과 통일되도록 cafeId-> No 검색으로 바꿨습니다 ) 
             if (no < 1 || no > cafes.size()) {
                 System.out.println(">> 잘못된 입력입니다.\n>> 다시 입력해주세요.");
                 continue;
