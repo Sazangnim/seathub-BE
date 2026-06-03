@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import DBConnect.DBconnector1;
-import user.User;
 
 // SQL 사용하는 메소드들
 public class UserDao {
@@ -105,5 +104,24 @@ public class UserDao {
 			System.out.println("로그인 DB 오류: " + e.getMessage());
 		}
 		return null;
+	}
+	
+	// 5. 회원 탈퇴
+	public boolean deleteUserByLoginId(String login_id) {
+		String sql = "DELETE FROM user WHERE login_id = ?";
+		
+		try (Connection conn = DBconnector1.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql)){
+			
+			pstmt.setString(1, login_id);
+			
+			int result = pstmt.executeUpdate();
+			
+			return result > 0;
+		
+		} catch (Exception e) {
+			System.out.println("회원탈퇴 DB 오류: " + e.getMessage());
+		}
+		return false;
 	}
 }
