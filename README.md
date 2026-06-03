@@ -32,7 +32,7 @@
 <br>
 
 ### 🗂️ 파일 구조
-유지보수와 확장성을 고려하여 DTO, DAO, Service, Main 계층을 분리한 **SOLID 구조**로 설계하였습니.
+유지보수와 확장성을 고려하여 DTO, DAO, Service, Main 계층을 분리한 **SOLID 구조**로 설계하였습니다.
 ```text
 SEATHUB-BE/
 ├── .github/
