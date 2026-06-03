@@ -71,7 +71,7 @@ db.password=password
 ```text
 db/01_create_database.sql
 db/02_create_tables.sql
-db/03_insert_sample_data.sql
+db/03_test.sql
 ...
 ```
 4. Eclipse에서 프로젝트를 실행합니다.
