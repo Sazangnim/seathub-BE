@@ -25,7 +25,7 @@
 ## 시작 가이드
 
 ### 🛠️ 개발 환경
-- **Language**: Java
+- **Language**: Java 17
 - **DB**: MySQL 8.0
 - **DB Access**: JDBC
 - **IDE**: Eclipse IDE
