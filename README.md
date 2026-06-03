@@ -48,8 +48,12 @@ SEATHUB-BE/
 └── README.md
 ```
 <br>
+
 ### ERD 구조
 
+<img width="70%" alt="image" src="https://github.com/user-attachments/assets/9ac5d485-fb44-43d0-8b89-0b3a20c7248f" />
+
+<br>
 
 ### 🔽 설치
 
