@@ -55,7 +55,7 @@ SEATHUB-BE/
 
 <br>
 
-### 🔽 설치
+### 🔽 설치 및 실행 방법
 
 1. Repository Clone
 ```sh
