@@ -67,7 +67,7 @@ db.url=jdbc:mysql://localhost:port-number/DB-name
 db.user=username
 db.password=password
 ```
-3. `db`폴더의 SQL파일들을 순서대로 실행합니다.
+3. `db` 폴더의 SQL파일들을 순서대로 실행합니다.
 ```text
 db/01_create_database.sql
 db/02_create_tables.sql
