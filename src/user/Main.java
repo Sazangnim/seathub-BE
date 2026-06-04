@@ -1,7 +1,8 @@
 package user;
 
 import java.util.Scanner;
-import cafe.CafeMenu; 
+import cafe.CafeMenu;
+import mypage.MyPageMain; 
 
 // 기능: 온보딩, 로그인, 회원가입
 
@@ -72,7 +73,7 @@ public class Main {
 				// 메인 메뉴 화면 메소드 올 자리!
 				// 임포트 하고
 				// 예시) 클래스.메소드(sc, loginUser); 로그인 유저 개체도 같이 넘김
-				
+				MyPageMain.runMyPage(loginUser.getLogin_id());
 				return;
 			} else {
 				System.out.println("---------------------------------");

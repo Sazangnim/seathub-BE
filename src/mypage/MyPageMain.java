@@ -9,16 +9,6 @@ public class MyPageMain {
     private static MyPageDao dao = new MyPageDao();
     private static final String ERR_MSG = ">> 잘못된 입력입니다.\n>> 다시 입력해주세요.";
 
-    public static void main(String[] args) {
-    	// [운영 환경 연동 시 아래 코드로 교체 예정]
-        // HttpSession session = request.getSession();
-        // String loginId = (String) session.getAttribute("loginId");
-        // runMyPage(loginId);
-        
-        // 연동 전 임시 테스트용
-        runMyPage("user01");
-    }
-
     public static void runMyPage(String loginId) {
         while (true) {
             MyPageDto u = dao.getUserProfile(loginId);

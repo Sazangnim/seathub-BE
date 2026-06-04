@@ -2,6 +2,8 @@ package cafe;
 
 import java.util.List;
 import java.util.Scanner;
+
+import mypage.MyPageMain;
 import user.User;
 
 public class CafeMenu {
@@ -66,6 +68,8 @@ public class CafeMenu {
                 }
                 case "5" -> {
                 	//마이페이지로 연결
+                	MyPageMain.runMyPage(loginUser.getLogin_id()); 
+                    break;
                 }
                 case "0" -> {
                     System.out.println("로그아웃합니다.");
