@@ -2,6 +2,7 @@ package mypage;
 
 import java.util.*;
 import java.time.LocalDateTime;
+import user.UserService;
 
 public class MyPageMain {
     private static Scanner sc = new Scanner(System.in);
@@ -21,6 +22,7 @@ public class MyPageMain {
     public static void runMyPage(String loginId) {
         while (true) {
             MyPageDto u = dao.getUserProfile(loginId);
+            UserService us = new UserService(); // for 회원탈퇴
             if (u == null) {
                 System.out.println("사용자를 찾을 수 없습니다.");
                 break;
@@ -55,8 +57,42 @@ public class MyPageMain {
                     showUserReservations(u.getLoginId());
                 }
             } else if (menu.equals("3")) {
-            	// 탈퇴 기능 들어갈 자리!!!
-                System.out.println("\n회원 탈퇴 기능은 현재 준비 중입니다.");
+            	// 회원 탈퇴 기능 추가
+            	while (true) {
+            		System.out.println("---------------------------------");
+            		System.out.println(">> 회원탈퇴를 위해 비밀번호를 입력해주세요.");
+                    System.out.print("\n비밀번호 입력: ");
+                    String chkpw = sc.nextLine();
+
+                    if (dao.checkPassword(u.getLoginId(), chkpw)) {
+                        System.out.println(">> 비밀번호가 일치합니다.\n");
+                        System.out.println("---------------------------------");
+                        System.out.println("          회원탈퇴 중......");
+                        System.out.println("---------------------------------");
+                        
+                        // 시간 소요되는 것처럼 보이고 싶어서 thread 기능 추가했습니다.
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        
+                        boolean result = us.deleteUser(u.getLoginId());
+                        
+                    	if (result) {
+                    		System.out.println("\n>> 회원탈퇴가 완료되었습니다.");
+                    		System.out.println(">> 첫 화면으로 이동합니다.\n");
+                    		return; // 마이 -> 메인 -> 온보딩
+                    		// [!] 잘 돌아가는지 메인페이지 연동 이후 체크할 것.
+                    	} else {
+                    		System.out.println(ERR_MSG);
+                    		continue;
+                    	}
+                    } 
+                    else {
+                        System.out.println(">> 비밀번호가 일치하지 않습니다.\n>> 다시 입력해주세요.");
+                    }
+                }
             } else if (menu.equals("0")) {
             	// 메인 메뉴로 연결!!!
                 break; 

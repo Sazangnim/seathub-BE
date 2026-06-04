@@ -54,7 +54,7 @@ public class Main {
 		while(true) {
 			System.out.println("---------------------------------");
 			System.out.println("             SEATHUB             ");
-			System.out.println("---------------------------------");
+			System.out.println("---------------------------------\n");
 			System.out.print("아이디: ");
 			String login_id = sc.nextLine();
 			System.out.print("비밀번호: ");
@@ -198,7 +198,7 @@ public class Main {
 		while (true) {
 			System.out.print("이메일: ");
 			email = sc.nextLine();
-			if (password.isBlank()) {
+			if (email.isBlank()) {
 				System.out.println(">> 잘못된 입력입니다.");
 				System.out.println(">> 다시 입력해주세요.");
 			} else {

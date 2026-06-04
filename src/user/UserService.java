@@ -1,8 +1,5 @@
 package user;
 
-import user.UserDao;
-import user.User;
-
 public class UserService {
 	
 	private UserDao ud = new UserDao();
@@ -44,5 +41,21 @@ public class UserService {
 
 	public boolean isLoginIdDuplicated(String login_id) {
 	    return ud.findByLoginId(login_id);
+	}
+	
+	// 4. 회원탈퇴 검사
+	public boolean deleteUser(String login_id) {
+		
+		boolean result = ud.deleteUserByLoginId(login_id);
+		
+		if (result) {
+			// 회원탈퇴 성공
+			return true;
+		} else {
+			// 회원탈퇴 실패
+			return false;
+		}
+		
+		
 	}
 }
