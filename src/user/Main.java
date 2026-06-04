@@ -52,9 +52,9 @@ public class Main {
 	// === 로그인 화면 ===
 	public static void loginScreen(Scanner sc, UserService us) {
 		while(true) {
-			System.out.println("---------------------------------");
+			System.out.println("\n---------------------------------");
 			System.out.println("             SEATHUB             ");
-			System.out.println("---------------------------------\n");
+			System.out.println("---------------------------------");
 			System.out.print("아이디: ");
 			String login_id = sc.nextLine();
 			System.out.print("비밀번호: ");
