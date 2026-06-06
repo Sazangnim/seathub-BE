@@ -65,9 +65,7 @@ public class CafeMenu {
                     String tags = selectTags(sc);
                     cafeDao.saveTags(saved.getCafeId(), tags);
 
-                    System.out.println("---------------------------------");
-                    System.out.println("          카페 등록 완료!         ");
-                    System.out.println("---------------------------------");
+                    registerSeats(sc, cafeDao, saved.getCafeId());
                     //System.out.println("cafeId: " + saved.getCafeId());
                 }
                 case "5" -> {
@@ -225,5 +223,58 @@ public class CafeMenu {
         }
         System.out.println(">> 잘못된 입력입니다.\n>> 다시 입력해주세요.");
     }
+    }
+    
+    // 좌석 등록 (타입별 개수 입력 → 자동 이름 생성)
+    public static void registerSeats(Scanner sc, CafeDAO cafeDao, int cafeId) {
+        System.out.println("\n--- 좌석 등록 ---");
+        System.out.println("등록할 좌석 개수를 입력해주세요. (없으면 0)");
+
+        int seatCnt     = readCount(sc, "일반석(SEAT) 개수: ");
+        int notebookCnt = readCount(sc, "노트북석(NOTEBOOK) 개수: ");
+        int roomCnt     = readCount(sc, "회의실(ROOM) 개수: ");
+        cafeDao.saveSeats(cafeId, "SEAT",     "A", seatCnt);
+        cafeDao.saveSeats(cafeId, "NOTEBOOK", "B", notebookCnt);
+        cafeDao.saveSeats(cafeId, "ROOM",     "C", roomCnt);
+
+        
+        
+        int total = seatCnt + notebookCnt + roomCnt;
+        System.out.println("---------------------------------");
+        if (total > 0) {
+            System.out.println("        좌석 " + total + "개 등록 완료!        ");
+        } 
+        else {
+            System.out.println("       등록된 좌석이 없습니다.       ");
+        }
+        
+        
+        System.out.println("---------------------------------");
+        System.out.println("---------------------------------");
+
+        System.out.println("          카페 등록 완료!         ");
+
+        System.out.println("---------------------------------");
+    }
+
+    // 좌석 개수 입력 (음수/문자 입력 못하도록 했습ㄴㅣ다~)
+    public static int readCount(Scanner sc, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            
+            String input = sc.nextLine().trim();
+            try {
+            	
+                int count = Integer.parseInt(input);
+                if (count < 0) {
+                    System.out.println(">> 잘못된 입력입니다.\n>> 다시 입력해주세요.");
+                    continue;
+                }
+                return count;
+            } 
+            catch (NumberFormatException e) {
+                System.out.println(">> 잘못된 입력입니다.\n>> 다시 입력해주세요.");
+            }
+        }
     }
 }
