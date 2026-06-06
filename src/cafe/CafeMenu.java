@@ -53,8 +53,7 @@ public class CafeMenu {
                    
                     System.out.print("카페 이름: ");
                     String cafeName = sc.nextLine();
-                    System.out.print("지역 (Ewha / Hongdae / Hyehwa / Jongno): ");
-                    String region = sc.nextLine();
+                    String region = selectRegion(sc);
                     System.out.print("주소: ");
                     String address = sc.nextLine();
 
@@ -182,6 +181,35 @@ public class CafeMenu {
             return;
         }
     }
+    
+    // 지역 선택
+    public static String selectRegion(Scanner sc) {
+    	
+        String[] regionList = {"Ewha", "Hongdae", "Hyehwa", "Jongno"};
+
+        System.out.println("\n--- 지역 선택 ---");
+      
+        for (int i = 0; i < regionList.length; i++) {
+            System.out.println((i + 1) + ". " + regionList[i]);
+        }
+
+        while (true) {
+            System.out.print("지역 번호 입력 (1 ~ 4): ");
+            
+            String input = sc.nextLine().trim();
+            try {
+                int idx = Integer.parseInt(input);
+                
+                
+                if (idx >= 1 && idx <= regionList.length) {
+                    return regionList[idx - 1]; 
+                }
+                
+            } 
+            catch (NumberFormatException e) { }
+            System.out.println(">> 잘못된 입력입니다.\n>> 다시 입력해주세요.");
+        }
+       }
 
     // 태그 선택
     public static String selectTags(Scanner sc) {
