@@ -72,7 +72,10 @@ public class CafeMenu {
                 }
                 case "5" -> {
                 	//마이페이지로 연결
-                	MyPageMain.runMyPage(loginUser.getLogin_id());
+                	int result = MyPageMain.runMyPage(loginUser.getLogin_id());
+                	if (result==1) {
+                		return;
+                	}		
                 }
                 case "0" -> {
                 	System.out.println("---------------------------------");
