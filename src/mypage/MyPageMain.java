@@ -8,14 +8,15 @@ public class MyPageMain {
     private static Scanner sc = new Scanner(System.in);
     private static MyPageDao dao = new MyPageDao();
     private static final String ERR_MSG = ">> 잘못된 입력입니다.\n>> 다시 입력해주세요.";
+  
 
-    public static void runMyPage(String loginId) {
+    public static int runMyPage(String loginId) {
         while (true) {
             MyPageDto u = dao.getUserProfile(loginId);
             UserService us = new UserService(); // for 회원탈퇴
             if (u == null) {
                 System.out.println("사용자를 찾을 수 없습니다.");
-                break;
+                return 0;
             }
 
             System.out.println("\n---------------------------------");
@@ -72,7 +73,7 @@ public class MyPageMain {
                     	if (result) {
                     		System.out.println("\n>> 회원탈퇴가 완료되었습니다.");
                     		System.out.println(">> 첫 화면으로 이동합니다.\n");
-                    		return; // 마이 -> 메인 -> 온보딩
+                    		return 1; // 마이 -> 메인 -> 온보딩
                     		// [!] 잘 돌아가는지 메인페이지 연동 이후 체크할 것.
                     	} else {
                     		System.out.println(ERR_MSG);
@@ -85,7 +86,7 @@ public class MyPageMain {
                 }
             } else if (menu.equals("0")) {
             	// 메인 메뉴로 연결!!!
-                break; 
+                return 0; 
             } else {
                 System.out.println(ERR_MSG);
             }
