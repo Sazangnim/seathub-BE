@@ -10,10 +10,11 @@ public class SeatMain {
     private static final SeatService seatService = new SeatService();
 
     public static void main(String[] args) {
+    	/* 테스트용 코드 주석 처리 해놨습니다!
         System.out.print("카페 ID를 입력하세요: ");
         int cafeId = scanner.nextInt();
         
-        /* 테스트용 코드 주석 처리 해놨습니다!
+        
         User testUser = new User(1, "USER", "테스트", "user100", "1234", "test@test.com", "M", 25, null);
         
         run(cafeId, testUser); // 테스트용 run
