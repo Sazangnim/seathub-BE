@@ -101,9 +101,15 @@ public class SeatMain {
             String currentStatus = seatService.checkSeatStatus(seatId);
 
             // 이미 사용 중인 좌석일 때도 메뉴판으로 튕기지 않고 목록을 다시 띄워줌
-            if ("OCCUPIED".equals(currentStatus)) {
-                System.out.println("[오류] 해당 좌석은 사용중인 좌석입니다.\n>> 다른 좌석을 선택해주세요.");
-                continue; // 
+            if ("OCCUPIED".equalsIgnoreCase(currentStatus)) {
+                System.out.println("\n[오류] 해당 좌석은 이미 사용 중인 좌석입니다.");
+                System.out.println(">> 다른 좌석을 선택해 주세요.");
+                System.out.println("---------------------------------");
+                
+                // 안전장치: 혹시 모를 스캐너 버퍼 찌꺼기 청소
+                scanner.nextLine(); 
+                
+                continue; 
             }
 
             // 발권 진행 (여기까지 도달했다면 완벽히 유효한 좌석 번호임)
@@ -115,6 +121,7 @@ public class SeatMain {
             // 서비스에서 중복 유저 걸러서 false가 리턴되면, 메뉴로 안 튕기고 목록을 다시 보여줌
             boolean isSuccess = seatService.issueTicket(loginUser.getUser_id(), Integer.parseInt(selected[0]), hours);
             if (!isSuccess) {
+            	System.out.println(">> 발권에 실패했습니다. 다시 시도해 주세요.");
                 continue; // 다시 좌석 선택 목록의 처음으로 돌아감
             }
             
@@ -178,7 +185,14 @@ public class SeatMain {
             String startTime = date + " " + startT + ":00";
             String endTime = date + " " + endT + ":00";
 
-            seatService.reserveRoom(loginUser.getUser_id(), Integer.parseInt(selected[0]), date, startTime, endTime);
+            boolean isSuccess = seatService.reserveRoom(loginUser.getUser_id(), Integer.parseInt(selected[0]), date, startTime, endTime);
+            
+            // 실패(SQL 에러, 이미 선점된 예약 등)했을 경우 마이페이지로 가지 않고 다시 회의실 목록으로
+            if (!isSuccess) {
+                System.out.println("\n[오류] 예약에 실패했습니다. 입력한 시간이나 예약 상태를 확인 후 다시 시도해 주세요.");
+                System.out.println("---------------------------------");
+                continue; 
+            }
             
             // 예약 성공 시 팀원의 마이페이지로 이동하도록 수정
             System.out.println("\n=================================");
