@@ -171,4 +171,32 @@ public class CafeDAO {
             throw new RuntimeException("태그 저장 실패", e);
         }
     }
+    // 좌석 등록
+    // 타입별 개수만 입력하면 좌석은 자동으로 생성됩니당 (A: 일반석, B: 노트북석, C: 회의실)
+    public void saveSeats(int cafeId, String seatType, String prefix, int count) {
+        if (count <= 0) return;
+
+        String sql = "INSERT INTO seat (cafe_id, seat_name, seat_type, status) " + "VALUES (?, ?, ?, 'AVAILABLE')";
+
+        try (Connection conn = DBconnector1.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+        	
+        	
+        	
+            for (int i = 1; i <= count; i++) {
+                String seatName = String.format("%s-%02d"  , prefix, i);
+                ps.setInt(1, cafeId);
+                
+                ps.setString(2, seatName);
+                
+                ps.setString(3, seatType);
+                ps.executeUpdate(); 
+            }
+
+        } 
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("좌석 등록 실패", e);
+        }
+    }
 }
