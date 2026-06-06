@@ -3,21 +3,12 @@ package mypage;
 import java.util.*;
 import java.time.LocalDateTime;
 import user.UserService;
+import java.time.format.DateTimeFormatter;
 
 public class MyPageMain {
     private static Scanner sc = new Scanner(System.in);
     private static MyPageDao dao = new MyPageDao();
     private static final String ERR_MSG = ">> 잘못된 입력입니다.\n>> 다시 입력해주세요.";
-
-    public static void main(String[] args) {
-    	// [운영 환경 연동 시 아래 코드로 교체 예정]
-        // HttpSession session = request.getSession();
-        // String loginId = (String) session.getAttribute("loginId");
-        // runMyPage(loginId);
-        
-        // 연동 전 임시 테스트용
-        runMyPage("user01");
-    }
 
     public static int runMyPage(String loginId) {
         while (true) {
@@ -34,7 +25,7 @@ public class MyPageMain {
 
             if (u.getRole().equals("USER")) {
                 System.out.println("1. 내 정보 조회 및 수정");
-                System.out.println("2. 내 예약 내역 확인");
+                System.out.println("2. 내 이용 내역 확인");
                 System.out.println("3. 회원 탈퇴");
                 System.out.println("0. 이전 메뉴로 돌아가기");
             } else if (u.getRole().equals("OWNER")) {
@@ -110,7 +101,7 @@ public class MyPageMain {
             System.out.println("아이디: " + u.getLoginId());
             System.out.println("이름: " + u.getUserName());
             System.out.println("회원 유형: " + u.getRole());
-            System.out.println("현재 이메일: " + u.getEmail());
+            System.out.println("이메일: " + u.getEmail());
             System.out.println("성별: " + u.getGender());
             System.out.println("나이: " + u.getAge());
             if(u.getRole().equals("OWNER")) 
@@ -166,16 +157,35 @@ public class MyPageMain {
         }
     }
 
+
     public static void showUserReservations(String loginId) {
         while (true) {
             System.out.println("\n---------------------------------");
-            System.out.println("          내 예약 내역            ");
+            System.out.println("          내 이용 내역            ");
             System.out.println("---------------------------------");
 
             List<Map<String, Object>> history = dao.getReservationHistory(loginId);
             LocalDateTime now = dao.getDbNow();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); // showUserReservations 상단 
 
-            System.out.println("[현재 이용 중인 좌석]");
+            System.out.println("\n[회의실 예약 내역]");
+            boolean hasFuture = false;
+            for (Map<String, Object> r : history) {
+                LocalDateTime start = ((java.sql.Timestamp) r.get("startTime")).toLocalDateTime();
+                LocalDateTime end = ((java.sql.Timestamp) r.get("endTime")).toLocalDateTime();
+                if (start.isAfter(now)) {
+                    System.out.println("- 매장명: " + r.get("cafeName"));
+                    System.out.println("- 좌석 이름: " + r.get("seatName"));
+                    System.out.println("- 예약 일시: " + start.format(dtf) + " ~ " + end.toLocalTime().withSecond(0).withNano(0));
+                    hasFuture = true;
+                }
+            }
+            // 예약이 없을 때
+            if (!hasFuture) {
+                System.out.println("현재 예약된 회의실이 없습니다.");
+            }
+
+            System.out.println("\n[현재 이용 중인 좌석/회의실]");
             boolean hasCurrent = false;
             for (Map<String, Object> r : history) {
                 LocalDateTime start = ((java.sql.Timestamp) r.get("startTime")).toLocalDateTime();
