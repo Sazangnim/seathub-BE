@@ -2,6 +2,7 @@ package seat;
 
 import java.util.List;
 import java.util.Scanner;
+import user.User;
 
 public class SeatMain {
 
@@ -11,7 +12,13 @@ public class SeatMain {
     public static void main(String[] args) {
         System.out.print("카페 ID를 입력하세요: ");
         int cafeId = scanner.nextInt();
-        run(cafeId);
+        
+        /* 테스트용 코드 주석 처리 해놨습니다!
+        User testUser = new User(1, "USER", "테스트", "user100", "1234", "test@test.com", "M", 25, null);
+        
+        run(cafeId, testUser); // 테스트용 run
+        */
+        
         scanner.close();
     }
 
@@ -24,11 +31,10 @@ public class SeatMain {
     
     
     
-    // 앞 팀원 카페 선택 이후 여기서 진입
-    public static void run(int cafeId) {
-    	
+ // 앞 팀원 카페 선택 이후 여기서 진입
+    public static void run(int cafeId, User loginUser) {
         while (true) {
-        	printHeader();
+            printHeader();
             System.out.println("  1. 일반석 / 노트북석 조회 및 발권");
             System.out.println("  2. 회의실 조회 및 예약");
             System.out.println("  0. 뒤로가기");
@@ -37,8 +43,8 @@ public class SeatMain {
             int choice = scanner.nextInt();
 
             switch (choice) {
-                case 1 -> seatMenu(cafeId);
-                case 2 -> roomMenu(cafeId);
+                case 1 -> seatMenu(cafeId, loginUser);
+                case 2 -> roomMenu(cafeId, loginUser);
                 case 0 -> { return; }
                 default -> System.out.println(">> 잘못된 입력입니다.\n>>다시 입력해주세요.");
             }
@@ -46,7 +52,7 @@ public class SeatMain {
     }
 
     // 일반석/노트북석: 목록 출력 → 선택 → 발권
-    private static void seatMenu(int cafeId) {
+    private static void seatMenu(int cafeId, User loginUser) {
         // 잘못 입력 시 목록에 머물도록 함수 전체를 while문으로 감싸기
         while (true) {
             List<String[]> seats = seatService.getSeatList(cafeId);
@@ -94,23 +100,29 @@ public class SeatMain {
 
             // 발권 진행 (여기까지 도달했다면 완벽히 유효한 좌석 번호임)
             System.out.println("\n▶ 선택한 좌석: " + selected[1] + " (" + selected[2] + ")");
-            System.out.print("사용자 ID 입력: ");
-            int userId = scanner.nextInt();
+            
             System.out.print("이용 시간 입력 (시간): ");
             int hours = scanner.nextInt();
             
-         // 서비스에서 중복 유저 걸러서 false가 리턴되면, 메뉴로 안 튕기고 목록을 다시 보여줌
-            boolean isSuccess = seatService.issueTicket(userId, Integer.parseInt(selected[0]), hours);
+            // 서비스에서 중복 유저 걸러서 false가 리턴되면, 메뉴로 안 튕기고 목록을 다시 보여줌
+            boolean isSuccess = seatService.issueTicket(loginUser.getUser_id(), Integer.parseInt(selected[0]), hours);
             if (!isSuccess) {
                 continue; // 다시 좌석 선택 목록의 처음으로 돌아감
             }
             
-            return; // 발권 성공 시에만 메인 메뉴로 나감
+            // 발권 성공 시 팀원의 마이페이지로 이동하도록 수정
+            System.out.println("\n=================================");
+            System.out.println(">> 발권이 완료되었습니다! 마이페이지로 이동합니다...");
+            System.out.println("=================================");
+            
+            mypage.MyPageMain.runMyPage(loginUser.getLogin_id());
+            
+            return; 
         }
     }
 
     // 회의실: 목록 출력 → 선택 → 예약
-    private static void roomMenu(int cafeId) {
+    private static void roomMenu(int cafeId, User loginUser) {
         // 잘못 입력 시 머물 수 있게 while문 감싸기
         while (true) {
             List<String[]> rooms = seatService.getRoomList(cafeId);
@@ -148,8 +160,6 @@ public class SeatMain {
 
             // 예약 진행
             System.out.println("\n▶ 선택한 회의실: " + selected[1]);
-            System.out.print("사용자 ID 입력: ");
-            int userId = scanner.nextInt();
             System.out.print("예약 날짜 입력 (예: 2026-05-26): ");
             String date = scanner.next();
             System.out.print("시작 시간 입력 (예: 14:00): ");
@@ -160,7 +170,14 @@ public class SeatMain {
             String startTime = date + " " + startT + ":00";
             String endTime = date + " " + endT + ":00";
 
-            seatService.reserveRoom(userId, Integer.parseInt(selected[0]), date, startTime, endTime);
+            seatService.reserveRoom(loginUser.getUser_id(), Integer.parseInt(selected[0]), date, startTime, endTime);
+            
+            // 예약 성공 시 팀원의 마이페이지로 이동하도록 수정
+            System.out.println("\n=================================");
+            System.out.println(">> 예약이 완료되었습니다! 마이페이지로 이동합니다...");
+            System.out.println("=================================");
+            
+            mypage.MyPageMain.runMyPage(loginUser.getLogin_id());
             return; 
         }
     }

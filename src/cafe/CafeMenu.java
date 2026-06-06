@@ -180,7 +180,7 @@ public class CafeMenu {
             System.out.println(">> 좌석 예약 화면으로 이동합니다.");
             
             // 좌석 발권/예약 연결 (좌석 코드 머지 후 아래 주석 해제하겠습니다)
-            SeatMain.run(cafeId);
+            SeatMain.run(cafeId, loginUser);
             return;
         }
     }
