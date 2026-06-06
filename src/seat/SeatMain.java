@@ -43,10 +43,17 @@ public class SeatMain {
             int choice = scanner.nextInt();
 
             switch (choice) {
-                case 1 -> seatMenu(cafeId, loginUser);
-                case 2 -> roomMenu(cafeId, loginUser);
+                case 1 -> {
+                	seatMenu(cafeId, loginUser);
+                	return;
+                	
+                	}
+                case 2 -> {
+                	roomMenu(cafeId, loginUser);
+                	return;
+                	}
                 case 0 -> { return; }
-                default -> System.out.println(">> 잘못된 입력입니다.\n>>다시 입력해주세요.");
+                default -> System.out.println(">> 잘못된 입력입니다.\n>> 다시 입력해주세요.");
             }
         }
     }
