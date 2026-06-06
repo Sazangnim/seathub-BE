@@ -101,23 +101,35 @@ public class MyPageDao {
         return list;
     }
     
-    
+
     public List<Map<String, Object>> getReservationHistory(String loginId) {
         List<Map<String, Object>> list = new ArrayList<>();
-        // 예약 정보, 카페 이름, 시작 시간을 가져옴
-        String sql = "SELECT sc.cafe_name, r.seat_id, r.start_time, r.end_time " +
-                     "FROM room_reservation r " +
-                     "JOIN seat s ON r.seat_id = s.seat_id " +
-                     "JOIN study_cafe sc ON s.cafe_id = sc.cafe_id " +
-                     "JOIN user u ON r.user_id = u.user_id " +
-                     "WHERE u.login_id = ? ORDER BY r.start_time DESC";
+        // UNION ALL을 사용하여 일반석과 회의실 예약을 모두 가져옴
+        // seat_name을 가져오고, 불필요한 초 계산은 SQL에서 제거함
+        String sql = 
+            "SELECT sc.cafe_name, s.seat_name, t.start_time, t.end_time " +
+            "FROM ticket t " +
+            "JOIN seat s ON t.seat_id = s.seat_id " +
+            "JOIN study_cafe sc ON s.cafe_id = sc.cafe_id " +
+            "JOIN user u ON t.user_id = u.user_id " +
+            "WHERE u.login_id = ? " +
+            "UNION ALL " +
+            "SELECT sc.cafe_name, s.seat_name, r.start_time, r.end_time " +
+            "FROM room_reservation r " +
+            "JOIN seat s ON r.seat_id = s.seat_id " +
+            "JOIN study_cafe sc ON s.cafe_id = sc.cafe_id " +
+            "JOIN user u ON r.user_id = u.user_id " +
+            "WHERE u.login_id = ? " +
+            "ORDER BY start_time DESC";
+
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, loginId);
+            pstmt.setString(2, loginId); // 물음표가 2개이므로 두 번 설정
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
                 Map<String, Object> m = new HashMap<>();
                 m.put("cafeName", rs.getString("cafe_name"));
-                m.put("seatId", rs.getInt("seat_id"));
+                m.put("seatName", rs.getString("seat_name")); // 키 이름을 seatName으로 통일
                 m.put("startTime", rs.getTimestamp("start_time"));
                 m.put("endTime", rs.getTimestamp("end_time"));
                 list.add(m);

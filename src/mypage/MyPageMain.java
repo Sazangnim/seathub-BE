@@ -187,8 +187,9 @@ public class MyPageMain {
                     long leftMinutes = diffMinutes % 60;
 
                     System.out.println("- 매장명: " + r.get("cafeName"));
-                    System.out.println("- 좌석 번호: " + r.get("seatId"));
-                    System.out.println("- 이용 시간: " + start.toLocalTime() + " ~ " + end.toLocalTime());
+                    System.out.println("- 좌석 이름: " + r.get("seatName")); // seatId -> seatName 변경
+                    System.out.println("- 이용 시간: " + start.toLocalTime().withSecond(0).withNano(0)
+                    		+ " ~ " + end.toLocalTime().withSecond(0).withNano(0));
                     System.out.printf("- 남은 시간: %02d:%02d\n", leftHours, leftMinutes);
                     hasCurrent = true;
                 }
@@ -200,7 +201,7 @@ public class MyPageMain {
                 LocalDateTime end = ((java.sql.Timestamp) r.get("endTime")).toLocalDateTime();
                 if (now.isAfter(end)) {
                     String date = ((java.sql.Timestamp) r.get("startTime")).toString().substring(0, 10);
-                    System.out.println("- " + r.get("cafeName") + "(" + date + ")");
+                    System.out.println("- " + r.get("cafeName") + " (" + r.get("seatName") + ") " + date);
                 }
             }
             System.out.println("---------------------------------");
