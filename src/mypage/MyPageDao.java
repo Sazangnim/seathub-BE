@@ -25,9 +25,10 @@ public class MyPageDao {
  // 1. 좌석 통계 (카페 ID 기준)
     public List<Map<String, Object>> getSeatStats(int cafeId) {
         List<Map<String, Object>> list = new ArrayList<>();
-        String sql = "SELECT seat_type, COUNT(r.reservation_id) as cnt " +
-                     "FROM seat s LEFT JOIN room_reservation r ON s.seat_id = r.seat_id " +
-                     "WHERE s.cafe_id = ? GROUP BY seat_type ORDER BY cnt DESC LIMIT 3";
+        String sql = "SELECT s.seat_type, COUNT(*) as cnt " +
+                 "FROM (SELECT seat_id FROM room_reservation UNION ALL SELECT seat_id FROM ticket) r " +
+                 "JOIN seat s ON r.seat_id = s.seat_id " +
+                 "WHERE s.cafe_id = ? GROUP BY s.seat_type ORDER BY cnt DESC LIMIT 3";
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, cafeId);
             ResultSet rs = pstmt.executeQuery();
@@ -44,9 +45,10 @@ public class MyPageDao {
     // 2. 피크타임 (카페 ID 기준)
     public List<Map<String, Object>> getPeakTimes(int cafeId) {
         List<Map<String, Object>> list = new ArrayList<>();
-        String sql = "SELECT HOUR(r.start_time) as hr, COUNT(*) as cnt " +
-                     "FROM room_reservation r JOIN seat s ON r.seat_id = s.seat_id " +
-                     "WHERE s.cafe_id = ? GROUP BY hr ORDER BY cnt DESC LIMIT 3";
+        String sql = "SELECT HOUR(start_time) as hr, COUNT(*) as cnt " +
+                 "FROM (SELECT start_time, seat_id FROM room_reservation UNION ALL SELECT start_time, seat_id FROM ticket) r " +
+                 "JOIN seat s ON r.seat_id = s.seat_id " +
+                 "WHERE s.cafe_id = ? GROUP BY hr ORDER BY cnt DESC LIMIT 3";
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, cafeId);
             ResultSet rs = pstmt.executeQuery();
@@ -65,11 +67,11 @@ public class MyPageDao {
         Map<String, Integer> map = new HashMap<>();
         // MONTH() 대신 DATE_SUB()를 사용하여 정확한 이전 달 계산
         String sql = "SELECT " +
-                     "(SELECT COUNT(*) FROM room_reservation r JOIN seat s ON r.seat_id = s.seat_id " +
-                     " WHERE s.cafe_id = ? AND start_time >= DATE_FORMAT(NOW(), '%Y-%m-01')) as cur, " +
-                     "(SELECT COUNT(*) FROM room_reservation r JOIN seat s ON r.seat_id = s.seat_id " +
-                     " WHERE s.cafe_id = ? AND start_time >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MONTH), '%Y-%m-01') " +
-                     " AND start_time < DATE_FORMAT(NOW(), '%Y-%m-01')) as prev";
+                 "(SELECT COUNT(*) FROM (SELECT start_time, seat_id FROM room_reservation UNION ALL SELECT start_time, seat_id FROM ticket) r JOIN seat s ON r.seat_id = s.seat_id " +
+                 " WHERE s.cafe_id = ? AND start_time >= DATE_FORMAT(NOW(), '%Y-%m-01') AND start_time < NOW()) as cur, " +
+                 "(SELECT COUNT(*) FROM (SELECT start_time, seat_id FROM room_reservation UNION ALL SELECT start_time, seat_id FROM ticket) r JOIN seat s ON r.seat_id = s.seat_id " +
+                 " WHERE s.cafe_id = ? AND start_time >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MONTH), '%Y-%m-01') " +
+                 " AND start_time < DATE_FORMAT(NOW(), '%Y-%m-01')) as prev";
         
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, cafeId);
