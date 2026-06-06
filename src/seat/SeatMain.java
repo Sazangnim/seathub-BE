@@ -31,15 +31,14 @@ public class SeatMain {
     
     
     
-    // 앞 팀원 카페 선택 이후 여기서 진입
+ // 앞 팀원 카페 선택 이후 여기서 진입
     public static void run(int cafeId, User loginUser) {
-    	printHeader();
         while (true) {
-            System.out.println("\n=============================");
+            printHeader();
             System.out.println("  1. 일반석 / 노트북석 조회 및 발권");
             System.out.println("  2. 회의실 조회 및 예약");
             System.out.println("  0. 뒤로가기");
-            System.out.println("=============================");
+            System.out.println("---------------------------------");
             System.out.print("선택: ");
             int choice = scanner.nextInt();
 
@@ -75,6 +74,8 @@ public class SeatMain {
             }
 
             System.out.println("\n예약할 좌석 번호를 선택하세요 (0: 뒤로가기): ");
+            System.out.println("---------------------------------");
+            System.out.print("선택: ");
             int idx = scanner.nextInt();
             
             // 0을 누르면 이 함수를 종료하고 1, 2, 0번이 있는 메인 메뉴판으로 나감
@@ -144,7 +145,9 @@ public class SeatMain {
                                   r[5] != null ? r[5] : "-");
             }
 
-            System.out.print("\n예약할 회의실 번호를 선택하세요. (0: 뒤로가기) : ");
+            System.out.println("\n예약할 회의실 번호를 선택하세요. (0: 뒤로가기)");
+            System.out.println("---------------------------------");
+            System.out.print("선택: ");
             int idx = scanner.nextInt();
             if (idx == 0) return;
             

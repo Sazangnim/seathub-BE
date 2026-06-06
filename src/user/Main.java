@@ -52,13 +52,22 @@ public class Main {
 	// === 로그인 화면 ===
 	public static void loginScreen(Scanner sc, UserService us) {
 		while(true) {
-			System.out.println("---------------------------------");
+			System.out.println("\n---------------------------------");
 			System.out.println("             SEATHUB             ");
-			System.out.println("---------------------------------\n");
+			System.out.println("---------------------------------");
+			System.out.println("<< [0] 시작 화면으로 돌아가기\n");
+			
 			System.out.print("아이디: ");
 			String login_id = sc.nextLine();
+			if (login_id.equals("0")) {
+				return;
+			}
+			
 			System.out.print("비밀번호: ");
 			String password = sc.nextLine();
+			if (password.equals("0")) {
+				return;
+			}
 			
 			// 로그인 유저 정보는 여기에서!
 			User loginUser = us.login(login_id, password);
@@ -106,6 +115,7 @@ public class Main {
 		System.out.println("---------------------------------");
 		System.out.println("             SEATHUB             ");
 		System.out.println("---------------------------------");
+		System.out.println("<< [0] 시작 화면으로 돌아가기\n");
 		System.out.println("회원 유형: ");
 		System.out.println("[1] 일반 회원");
 		System.out.println("[2] 사장 회원");
@@ -124,6 +134,8 @@ public class Main {
 			} else if (roleChoice.equals("2")) {
 				role = "OWNER";
 				break;
+			} else if (roleChoice.equals("0")) {
+				return;
 			} else {
 				System.out.println(">> 잘못된 입력입니다.");
 				System.out.println(">> 다시 입력해주세요.");

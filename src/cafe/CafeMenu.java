@@ -3,13 +3,19 @@ package cafe;
 import java.util.List;
 import java.util.Scanner;
 import user.User;
+import seat.SeatMain;
+import mypage.MyPageMain;
 
 public class CafeMenu {
 	// 로그인 성공 후에 들어 올 수 있는 카페 메뉴 부분
 
+	//학생 권한 제한 하기 위한 상수 추가했습니다 나이 수정은 여기서 하면됩니다!
+    private static final int STUDENT_MIN_AGE = 13;
+	private static final int STUDENT_MAX_AGE = 19;
 	
 	public static void cafeMenu(Scanner sc, User loginUser) {
         CafeDAO cafeDao = new CafeDAO();
+        
         
 
         while (true) {
@@ -66,9 +72,15 @@ public class CafeMenu {
                 }
                 case "5" -> {
                 	//마이페이지로 연결
+                	int result = MyPageMain.runMyPage(loginUser.getLogin_id());
+                	if (result==1) {
+                		return;
+                	}		
                 }
                 case "0" -> {
-                    System.out.println("로그아웃합니다.");
+                	System.out.println("---------------------------------");
+                	System.out.println("          로그아웃 중......");
+					System.out.println("---------------------------------");
                     return;
                 }
                 default -> System.out.println(">> 잘못된 입력입니다.\n>> 다시 입력해주세요.");
@@ -77,7 +89,7 @@ public class CafeMenu {
     }
 
     public static void showMenu() {
-        System.out.println("---------------------------------");
+        System.out.println("\n---------------------------------");
         System.out.println("             SEATHUB             ");
         System.out.println("---------------------------------");
         System.out.println("1. 전체 카페 조회");
@@ -86,6 +98,7 @@ public class CafeMenu {
         System.out.println("4. 카페 등록 (사장회원)");
         System.out.println("5. 마이페이지");
         System.out.println("0. 로그아웃");
+        System.out.println("---------------------------------");
         System.out.print("선택: ");
     }
 
@@ -116,7 +129,9 @@ public class CafeMenu {
         }
 
         while (true) {
-            System.out.print("\n예약할 카페 번호를 입력해주세요. (0: 뒤로가기)\n선택: ");
+            System.out.println("\n예약할 카페 번호를 입력해주세요. (0: 뒤로가기)");
+            System.out.println("---------------------------------");
+            System.out.print("선택: ");
             String input = sc.nextLine();
 
             if (input.trim().equals("0")) {
@@ -143,15 +158,29 @@ public class CafeMenu {
                 continue;
             }
             // No(순번) -> 실제 cafe_id로 변환해서 좌석 화면에 넘길 수 있도록
-            int cafeId = cafes.get(no - 1).getCafeId();
+            Cafe selected = cafes.get(no-1);
+            int cafeId = selected.getCafeId();
             
+            //Women Only 권한 제한 하기
+            if (selected.getTags() != null && selected.getTags().contains("Women Only")
+                    && !loginUser.getGender().equals("FEMALE")) {
+                System.out.println(">> 여성 전용 카페는 여성 회원만 이용하실 수 있습니다.");
+                continue;
+            }
+            
+            //Student Only 카페는 학생(13~19세)으로 권한 제한하기
+            if (selected.getTags() != null && selected.getTags().contains("Student Only")
+                    && (loginUser.getAge() < STUDENT_MIN_AGE || loginUser.getAge() > STUDENT_MAX_AGE)) {
+                System.out.println(">> 학생 전용 카페는 학생 회원만 이용하실 수 있습니다.");
+                continue;
+            }
            
            
 
             System.out.println(">> 좌석 예약 화면으로 이동합니다.");
             
             // 좌석 발권/예약 연결 (좌석 코드 머지 후 아래 주석 해제하겠습니다)
-            // SeatMain.run(cafeId);
+            SeatMain.run(cafeId, loginUser);
             return;
         }
     }
