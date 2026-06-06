@@ -181,7 +181,7 @@ public class MyPageMain {
             }
             // 예약이 없을 때
             if (!hasFuture) {
-                System.out.println("현재 예약된 회의실(또는 좌석)이 없습니다.");
+                System.out.println("현재 예약된 회의실이 없습니다.");
             }
             System.out.println();
 
