@@ -68,22 +68,6 @@ CREATE TABLE room_reservation (
     REFERENCES seat(seat_id)
 );
 
-# Review 테이블
-CREATE TABLE review (
-    review_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    cafe_id INT NOT NULL,
-    rating INT NOT NULL,
-    content TEXT NOT NULL,
-    created_at DATETIME NOT NULL,
-
-    FOREIGN KEY (user_id)
-    REFERENCES user(user_id),
-
-    FOREIGN KEY (cafe_id)
-    REFERENCES study_cafe(cafe_id)
-);
-
 # Tag 테이블
 CREATE TABLE tag (
     tag_id INT AUTO_INCREMENT PRIMARY KEY,
