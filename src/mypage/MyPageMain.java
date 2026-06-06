@@ -172,10 +172,11 @@ public class MyPageMain {
             boolean hasFuture = false;
             for (Map<String, Object> r : history) {
                 LocalDateTime start = ((java.sql.Timestamp) r.get("startTime")).toLocalDateTime();
+                LocalDateTime end = ((java.sql.Timestamp) r.get("endTime")).toLocalDateTime();
                 if (start.isAfter(now)) {
                     System.out.println("- 매장명: " + r.get("cafeName"));
                     System.out.println("- 좌석 이름: " + r.get("seatName"));
-                    System.out.println("- 예약 일시: " + start.format(dtf));
+                    System.out.println("- 예약 일시: " + start.format(dtf) + " ~ " + end.toLocalTime().withSecond(0).withNano(0));
                     hasFuture = true;
                 }
             }
@@ -183,9 +184,8 @@ public class MyPageMain {
             if (!hasFuture) {
                 System.out.println("현재 예약된 회의실이 없습니다.");
             }
-            System.out.println();
 
-            System.out.println("[현재 이용 중인 좌석/회의실]");
+            System.out.println("\n[현재 이용 중인 좌석/회의실]");
             boolean hasCurrent = false;
             for (Map<String, Object> r : history) {
                 LocalDateTime start = ((java.sql.Timestamp) r.get("startTime")).toLocalDateTime();
