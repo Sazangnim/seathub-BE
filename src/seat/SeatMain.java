@@ -33,7 +33,7 @@ public class SeatMain {
     
     
  // 앞 팀원 카페 선택 이후 여기서 진입
-    public static void run(int cafeId, User loginUser) {
+    public static int run(int cafeId, User loginUser) {
         while (true) {
             printHeader();
             System.out.println("  1. 일반석 / 노트북석 조회 및 발권");
@@ -45,28 +45,36 @@ public class SeatMain {
 
             switch (choice) {
                 case 1 -> {
-                	seatMenu(cafeId, loginUser);
-                	return;
+                	int result = seatMenu(cafeId, loginUser);
+                	if (result == 1) {
+                        return 1; // 회원탈퇴 → 온보딩
+                    } else if (result == 0) {
+                        return 0; // 예약 후 마이페이지 뒤로가기 → 카페메뉴
+                    }
                 	
                 	}
                 case 2 -> {
-                	roomMenu(cafeId, loginUser);
-                	return;
+                	int result = roomMenu(cafeId, loginUser);
+                	if (result == 1) {
+                        return 1; // 회원탈퇴 → 온보딩
+                    } else if (result == 0) {
+                        return 0; // 예약 후 마이페이지 뒤로가기 → 카페메뉴
+                    }
                 	}
-                case 0 -> { return; }
+                case 0 -> { return 0; }
                 default -> System.out.println(">> 잘못된 입력입니다.\n>> 다시 입력해주세요.");
             }
         }
     }
 
     // 일반석/노트북석: 목록 출력 → 선택 → 발권
-    private static void seatMenu(int cafeId, User loginUser) {
+    private static int seatMenu(int cafeId, User loginUser) {
         // 잘못 입력 시 목록에 머물도록 함수 전체를 while문으로 감싸기
         while (true) {
             List<String[]> seats = seatService.getSeatList(cafeId);
             if (seats.isEmpty()) { 
                 System.out.println("[안내] 현재 조회 가능한 좌석이 없습니다."); 
-                return; // 좌석이 아예 없으면 메인 메뉴판으로 돌아감
+                return 0; // 좌석이 아예 없으면 메인 메뉴판으로 돌아감
             }
 
             System.out.println("\n=== 일반석 / 노트북석 목록 ===");
@@ -87,7 +95,7 @@ public class SeatMain {
             int idx = scanner.nextInt();
             
             // 0을 누르면 이 함수를 종료하고 1, 2, 0번이 있는 메인 메뉴판으로 나감
-            if (idx == 0) return; 
+            if (idx == 0) return 0; 
             
             // 번호를 잘못 입력했을 때 return 대신 continue를 써서 좌석 목록을 다시 보여줌
             if (idx < 1 || idx > seats.size()) { 
@@ -130,20 +138,24 @@ public class SeatMain {
             System.out.println(">> 발권이 완료되었습니다! 마이페이지로 이동합니다...");
             System.out.println("=================================");
             
-            mypage.MyPageMain.runMyPage(loginUser.getLogin_id());
+            int myPageResult = mypage.MyPageMain.runMyPage(loginUser.getLogin_id());
             
-            return; 
+            if (myPageResult == 1) {
+            	return 1;
+            }
+            
+            return 0; 
         }
     }
 
     // 회의실: 목록 출력 → 선택 → 예약
-    private static void roomMenu(int cafeId, User loginUser) {
+    private static int roomMenu(int cafeId, User loginUser) {
         // 잘못 입력 시 머물 수 있게 while문 감싸기
         while (true) {
             List<String[]> rooms = seatService.getRoomList(cafeId);
             if (rooms.isEmpty()) { 
                 System.out.println("[안내] 현재 조회 가능한 회의실이 없습니다."); 
-                return; 
+                return 0; 
             }
 
             printHeader();
@@ -164,7 +176,7 @@ public class SeatMain {
             System.out.println("---------------------------------");
             System.out.print("선택: ");
             int idx = scanner.nextInt();
-            if (idx == 0) return;
+            if (idx == 0) return 0;
             
             if (idx < 1 || idx > rooms.size()) { 
                 System.out.println(">> 잘못된 입력입니다.\n>> 다시 입력해주세요.");
@@ -199,8 +211,12 @@ public class SeatMain {
             System.out.println(">> 예약이 완료되었습니다! 마이페이지로 이동합니다...");
             System.out.println("=================================");
             
-            mypage.MyPageMain.runMyPage(loginUser.getLogin_id());
-            return; 
+            int seatResult = mypage.MyPageMain.runMyPage(loginUser.getLogin_id());
+            
+            if (seatResult == 1) {
+            	return 1;
+            }
+            return 0; 
         }
     }
 
