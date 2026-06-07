@@ -28,6 +28,7 @@ public class CafeMenu {
                     List<Cafe> cafes = cafeDao.findAll();
                     printCafes(cafes);
                     selectCafe(sc, loginUser, cafes);
+                    return;
                 }
                 case "2" -> {
                     System.out.print("지역 입력 (Ewha / Hongdae / Hyehwa / Jongno): ");
@@ -35,6 +36,7 @@ public class CafeMenu {
                     List<Cafe> cafes = cafeDao.findByRegion(region);
                     printCafes(cafes);
                     selectCafe(sc, loginUser, cafes);
+                    return;
                 }
                 case "3" -> {
                     System.out.print("태그 입력 (24H / Laptop / Quiet / Women Only / Student Only): ");
@@ -42,6 +44,7 @@ public class CafeMenu {
                     List<Cafe> cafes = cafeDao.findByTag(tag);
                     printCafes(cafes);
                     selectCafe(sc, loginUser, cafes);
+                    return;
                 }
                 case "4" -> {
                 	// 사장 회원만 카페 등록 가능
