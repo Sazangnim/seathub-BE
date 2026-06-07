@@ -1,4 +1,3 @@
--- Active: 1775217656784@@127.0.0.1@3307@seathub
 # User 테이블
 CREATE TABLE user (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
