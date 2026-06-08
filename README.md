@@ -11,7 +11,7 @@
 
 ### 🔗 배포주소
 
-https://github.com/Sazangnim/seathub-BE/releases/tag/v1.0.0
+[배포 주소 바로가기](https://github.com/Sazangnim/seathub-BE/releases/tag/v1.0.0)
 
 <br>
 
