@@ -21,27 +21,36 @@ public class CafeMenu {
         while (true) {
             showMenu();
             String choice = sc.nextLine();
-       
+            int result;
 
             switch (choice) {
                 case "1" -> {
                     List<Cafe> cafes = cafeDao.findAll();
                     printCafes(cafes);
-                    selectCafe(sc, loginUser, cafes);
+                    result = selectCafe(sc, loginUser, cafes);
+                    if (result == 1) {
+                        return;
+                    }
                 }
                 case "2" -> {
                     System.out.print("지역 입력 (Ewha / Hongdae / Hyehwa / Jongno): ");
                     String region = sc.nextLine();
                     List<Cafe> cafes = cafeDao.findByRegion(region);
                     printCafes(cafes);
-                    selectCafe(sc, loginUser, cafes);
+                    result = selectCafe(sc, loginUser, cafes);
+                    if (result == 1) {
+                        return;
+                    }
                 }
                 case "3" -> {
                     System.out.print("태그 입력 (24H / Laptop / Quiet / Women Only / Student Only): ");
                     String tag = sc.nextLine();
                     List<Cafe> cafes = cafeDao.findByTag(tag);
                     printCafes(cafes);
-                    selectCafe(sc, loginUser, cafes);
+                    result = selectCafe(sc, loginUser, cafes);
+                    if (result == 1) {
+                        return;
+                    }
                 }
                 case "4" -> {
                 	// 사장 회원만 카페 등록 가능
@@ -69,7 +78,7 @@ public class CafeMenu {
                 }
                 case "5" -> {
                 	//마이페이지로 연결
-                	int result = MyPageMain.runMyPage(loginUser.getLogin_id());
+                	result = MyPageMain.runMyPage(loginUser.getLogin_id());
                 	if (result==1) {
                 		return;
                 	}		
@@ -120,9 +129,9 @@ public class CafeMenu {
     }
     
     //카페 선택에서 좌석 예약 연결하는 부분 (일반 회원만 가능하도록 수정완료)
-    public static void selectCafe(Scanner sc, User loginUser, List<Cafe> cafes) {
+    public static int selectCafe(Scanner sc, User loginUser, List<Cafe> cafes) {
         if (cafes.isEmpty()) {
-            return;
+            return 0;
         }
 
         while (true) {
@@ -132,13 +141,13 @@ public class CafeMenu {
             String input = sc.nextLine();
 
             if (input.trim().equals("0")) {
-                return;
+                return 0;
             }
 
             // 좌석 예약은 일반 회원(USER)만 이용 가능
             if (!loginUser.getRole().equals("USER")) {
                 System.out.println(">> 좌석 예약은 일반 회원만 이용하실 수 있습니다.");
-                return;
+                return 0;
             }
 
             int no;
@@ -177,8 +186,12 @@ public class CafeMenu {
             System.out.println(">> 좌석 예약 화면으로 이동합니다.");
             
             // 좌석 발권/예약 연결 (좌석 코드 머지 후 아래 주석 해제하겠습니다)
-            SeatMain.run(cafeId, loginUser);
-            return;
+            int seatResult = SeatMain.run(cafeId, loginUser);
+            
+            if (seatResult == 1) {
+            	return 1;
+            }
+            return 0;
         }
     }
     

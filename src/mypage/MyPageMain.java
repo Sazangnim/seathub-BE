@@ -73,8 +73,8 @@ public class MyPageMain {
                     	if (result) {
                     		System.out.println("\n>> 회원탈퇴가 완료되었습니다.");
                     		System.out.println(">> 첫 화면으로 이동합니다.\n");
+
                     		return 1; // 마이 -> 메인 -> 온보딩
-                    		// [!] 잘 돌아가는지 메인페이지 연동 이후 체크할 것.
                     	} else {
                     		System.out.println(ERR_MSG);
                     		continue;
