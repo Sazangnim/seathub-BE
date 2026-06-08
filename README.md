@@ -10,8 +10,8 @@
 <br>
 
 ### 🔗 배포주소
-```text
-(추가 기재)
+```url
+https://github.com/Sazangnim/seathub-BE/releases/tag/v1.0.0
 ```
 <br>
 
