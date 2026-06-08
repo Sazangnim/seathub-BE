@@ -10,9 +10,9 @@
 <br>
 
 ### 🔗 배포주소
-```url
+
 https://github.com/Sazangnim/seathub-BE/releases/tag/v1.0.0
-```
+
 <br>
 
 ### 🔍 주요기능
