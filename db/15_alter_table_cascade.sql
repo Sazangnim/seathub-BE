@@ -1,3 +1,4 @@
+-- Active: 1775217656784@@127.0.0.1@3307@seathub
 # 자식 테이블 외래키 제약조건 설정
 
 # == seat - cafe_id ==
@@ -9,6 +10,17 @@ ALTER TABLE seat
 ADD CONSTRAINT fk_seat_cafe
 FOREIGN KEY (cafe_id)
 REFERENCES study_cafe(cafe_id)
+ON DELETE CASCADE;
+
+# == study_cafe - user_id ==
+# SHOW CREATE TABLE study_cafe;
+
+ALTER TABLE study_cafe DROP FOREIGN KEY study_cafe_ibfk_1;
+
+ALTER TABLE study_cafe
+ADD CONSTRAINT fk_cafe_user
+FOREIGN KEY (user_id)
+REFERENCES user(user_id)
 ON DELETE CASCADE;
 
 # == ticket - user_id, seat_id ==
