@@ -78,3 +78,6 @@ db/03_test.sql
 ```text
 src/user/Main.java
 ```
+<br>
+
+> 배포 파일은 배포주소를 참고해 실행합니다.
